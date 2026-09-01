@@ -1,27 +1,63 @@
-try_apply_function <- function(fun, val, fun_lab, val_lab, context = "") {
+#' Try apply x to f
+#'
+#' @param fun function. Function to which you want to apply the value.
+#' @param val value. Value to which you want to try apply to the function.
+#'
+#' @returns list. Details success, value of fun(val) and the error message
+#' @noRd
+
+try_apply_function <- function(fun, val) {
   tryCatch(
     {
-      fun(val)
+      list(
+        success = TRUE,
+        value = fun(val),
+        error = NULL
+      )
     },
     error = function(e) {
-      testthat::fail(
-        c(
-          sprintf("Could not apply %s to %s", fun_lab, val_lab),
-          context,
-          sprintf("\nDetails: %s", conditionMessage(e))
-        )
+      list(
+        success = FALSE,
+        value = NULL,
+        error = e
       )
     }
   )
 }
 
-expect_idempotent <- function(f, x, ...) {
+#' Do you expect a function to be idempotent?
+#'
+#' @description This function tests whether if you apply a function on a value
+#'   twice, it is the same as applying it a single time.
+#'
+#' @param f function. The function you are testing to be idempotent
+#' @param x parameter(s). The value under which you test the function.
+#' @param ... Arguments passed into [waldo::compare()]
+#'
+#' @export
+#'
+#' @details Tests that \eqn{f(f(x)) = f(x)}
+#'
+#' @examples
+#' x <- c(2, 1, 3)
+#' expect_idempotent(mean, x)
+#' expect_idempotent(sort, x)
 
-  # Capture labels before evaluation
+expect_idempotent <- function(f, x, ...) {
   f_act <- testthat::quasi_label(rlang::enquo(f))
   x_act <- testthat::quasi_label(rlang::enquo(x))
-  once_lab <- sprintf("%s(%s)", f_act$lab, x_act$lab)
-  twice_lab <- sprintf("%s(%s)", f_act$lab, once_lab)
+
+  once_lab <- sprintf(
+    "%s(%s)",
+    f_act$lab,
+    x_act$lab
+  )
+
+  twice_lab <- sprintf(
+    "%s(%s)",
+    f_act$lab,
+    once_lab
+  )
 
   if (!is.function(f)) {
     testthat::fail(
@@ -30,54 +66,84 @@ expect_idempotent <- function(f, x, ...) {
         f_act$lab
       )
     )
+
+    return(invisible(FALSE))
   }
 
-  once <- try_apply_function(f, x, f_act$lab, x_act$lab)
-  twice <- try_apply_function(f, once, f_act$lab, once_lab, context = sprintf("\nThe first application, %s, succeeded but its result could not be applied to %s again.", once_lab, f_act$lab))
+  once <- try_apply_function(f, x)
 
-  comparison <- waldo::compare(
-    twice,
-    once,
-    ...,
-    x_arg = twice_lab,
-    y_arg = once_lab
-  )
-
-  if (length(comparison) == 0) {
-    testthat::pass()
-  } else {
-    msg <- paste(
-      sprintf("Expected %s to be idempotent on %s.", f_act$lab, x_act$lab),
-      sprintf("\nIdempotence requires:\n\n     %s == %s\n\n", twice_lab, once_lab),
-      "Differences:\n",
-      comparison
+  if (!once$success) {
+    testthat::fail(
+      c(
+        sprintf(
+          "Could not apply %s to %s.",
+          f_act$lab,
+          x_act$lab
+        ),
+        "",
+        "Details:",
+        "",
+        conditionMessage(once$error)
+      )
     )
+  } else {
+    twice <- try_apply_function(f, once$value)
 
-    testthat::fail(msg)
+    if (!twice$success) {
+      testthat::fail(
+        c(
+          sprintf(
+            "Could not apply %s to %s.",
+            f_act$lab,
+            once_lab
+          ),
+          "",
+          sprintf(
+            "The first application, %s, succeeded, but its result could not be applied to %s again.",
+            once_lab,
+            f_act$lab
+          ),
+          "",
+          "Details:",
+          "",
+          conditionMessage(twice$error)
+        )
+      )
+    } else {
+      # Compare f(f(x)) with f(x)
+      comparison <- waldo::compare(
+        twice$value,
+        once$value,
+        ...,
+        x_arg = twice_lab,
+        y_arg = once_lab
+      )
+
+      if (length(comparison) > 0) {
+        testthat::fail(
+          c(
+            sprintf(
+              "Expected %s to be idempotent on %s.",
+              f_act$lab,
+              x_act$lab
+            ),
+            "",
+            "Idempotence requires:",
+            "",
+            sprintf(
+              "    %s == %s",
+              twice_lab,
+              once_lab
+            ),
+            "",
+            "Differences:",
+            "",
+            comparison
+          )
+        )
+      } else {
+        testthat::pass()
+      }
+    }
   }
-
 }
-
-## TODO:
-##  -- create twice_lab and once_lab variables to stop recomputing
-##  -- refactor computing of values into helper function
-
-
-expect_idempotent("hello!", 2)
-
-expect_idempotent(sum, "hello")
-
-f <- function(x) {
-  if (!is.numeric(x)) {
-    stop("Input must be numeric.")
-  }
-  return(paste("The number is", x))  # Returns a character string
-}
-
-expect_idempotent(f, 5)
-
-g <- function(x) x + 1
-expect_idempotent(g, 2)
-
-expect_idempotent(mean, c(1,2,3))
-
