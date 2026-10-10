@@ -77,8 +77,16 @@ test_that("expect_idempotent` fails when f cannot be applied to x twice", {
 
   expect_failure(
     expect_idempotent(what_number, 5),
-    "result could not be applied to `what_number` again"
+    "Could not apply `what_number` to 5"
   )
 
+})
+
+test_that("`expect_idempotent` respects custom tolerance", {
+
+  f_drift <- function(x) x + 1e-10
+
+  expect_failure(expect_idempotent(f_drift, 1, tolerance = 1e-12))
+  expect_success(expect_idempotent(f_drift, 1, tolerance = 1e-8))
 })
 
