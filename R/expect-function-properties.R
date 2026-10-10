@@ -5,11 +5,11 @@
 #'
 #' @param f function. The function you are testing.
 #' @param x parameter(s). The value under which you test the function.
-#' @param tolerance. Passed on to [waldo::compare()]. If non-null, ignores small
+#' @param tolerance Passed on to [waldo::compare()]. If non-null, ignores small
 #' floating point differences
 #' @param ... Additional arguments passed into [waldo::compare()]
 #'
-#' @family {function properties}
+#' @family function properties
 #'
 #' @export
 #'
@@ -34,11 +34,11 @@ expect_idempotent <- function(f, x, tolerance = testthat::testthat_tolerance(), 
 #' @param f function. The function you are testing.
 #' @param x parameter(s). The value under which you test the function `f`.
 #' @param n integer. The expected order of idempotence.
-#' @param tolerance. Passed on to [waldo::compare()]. If non-null, ignores small
+#' @param tolerance Passed on to [waldo::compare()]. If non-null, ignores small
 #' floating point differences
 #' @param ... Additional arguments passed into [waldo::compare()]
 #'
-#' @family {function properties}
+#' @family function properties
 #'
 #' @export
 #'
@@ -70,11 +70,11 @@ expect_n_idempotent <- function(f, x, n, tolerance = testthat::testthat_toleranc
 #'
 #' @param f function. The function you are testing to be involutory
 #' @param x parameter(s). The value under which you test the function.
-#' @param tolerance. Passed on to [waldo::compare()]. If non-null, ignores small
+#' @param tolerance Passed on to [waldo::compare()]. If non-null, ignores small
 #' floating point differences
 #' @param ... Additional arguments passed into [waldo::compare()]
 #'
-#' @family {function properties}
+#' @family function properties
 #'
 #' @export
 #'
@@ -84,7 +84,7 @@ expect_n_idempotent <- function(f, x, n, tolerance = testthat::testthat_toleranc
 #' @examples
 #' x <- c(2, 1, 3)
 #' expect_involutory(rev, x) # passes
-#' expect_involutory(sort, x) # errors
+#' testthat::expect_failure(expect_involutory(sort, x)) # fails
 
 expect_involutory <- function(f, x, tolerance = testthat::testthat_tolerance(), ...) {
   f_quo <- rlang::enquo(f)
@@ -103,11 +103,11 @@ expect_involutory <- function(f, x, tolerance = testthat::testthat_tolerance(), 
 #' @param f function. The function you are testing.
 #' @param x parameter(s). The value under which you test the function `f`.
 #' @param n integer. The expected order of involution.
-#' @param tolerance. Passed on to [waldo::compare()]. If non-null, ignores small
+#' @param tolerance Passed on to [waldo::compare()]. If non-null, ignores small
 #' floating point differences
 #' @param ... Additional arguments passed into [waldo::compare()]
 #'
-#' @family {function properties}
+#' @family function properties
 #'
 #' @export
 #'
@@ -138,11 +138,11 @@ expect_n_involutory <- function(f, x, n, tolerance = testthat::testthat_toleranc
 #' @param f function. The function you are testing to be periodic.
 #' @param x parameter(s). The value under which you test the function `f`.
 #' @param period numeric. The expected period of \eqn{f(x)}
-#' @param tolerance. Passed on to [waldo::compare()]. If non-null, ignores small
+#' @param tolerance Passed on to [waldo::compare()]. If non-null, ignores small
 #' floating point differences
 #' @param ... Additional arguments passed into [waldo::compare()]
 #'
-#' @family {function properties}
+#' @family function properties
 #'
 #' @export
 #'

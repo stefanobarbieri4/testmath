@@ -13,10 +13,10 @@ expect_periodic(f, x, period, tolerance = testthat::testthat_tolerance(), ...)
 
 \item{period}{numeric. The expected period of \eqn{f(x)}}
 
-\item{...}{Additional arguments passed into \code{\link[waldo:compare]{waldo::compare()}}}
-
-\item{tolerance.}{Passed on to \code{\link[waldo:compare]{waldo::compare()}}. If non-null, ignores small
+\item{tolerance}{Passed on to \code{\link[waldo:compare]{waldo::compare()}}. If non-null, ignores small
 floating point differences}
+
+\item{...}{Additional arguments passed into \code{\link[waldo:compare]{waldo::compare()}}}
 }
 \description{
 This function tests whether a function, \eqn{f}, is periodic on
@@ -31,10 +31,10 @@ expect_periodic(cos, c(0, 1, 2), 4*pi)
 expect_periodic(cos, c(pi/2), pi)
 }
 \seealso{
-Other {function properties}:
+Other function properties:
 \code{\link[=expect_idempotent]{expect_idempotent()}},
 \code{\link[=expect_involutory]{expect_involutory()}},
 \code{\link[=expect_n_idempotent]{expect_n_idempotent()}},
 \code{\link[=expect_n_involutory]{expect_n_involutory()}}
 }
-\concept{{function properties}}
+\concept{function properties}

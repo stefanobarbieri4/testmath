@@ -13,10 +13,10 @@ expect_n_involutory(f, x, n, tolerance = testthat::testthat_tolerance(), ...)
 
 \item{n}{integer. The expected order of involution.}
 
-\item{...}{Additional arguments passed into \code{\link[waldo:compare]{waldo::compare()}}}
-
-\item{tolerance.}{Passed on to \code{\link[waldo:compare]{waldo::compare()}}. If non-null, ignores small
+\item{tolerance}{Passed on to \code{\link[waldo:compare]{waldo::compare()}}. If non-null, ignores small
 floating point differences}
+
+\item{...}{Additional arguments passed into \code{\link[waldo:compare]{waldo::compare()}}}
 }
 \description{
 This function tests whether a function, \eqn{f}, applied \eqn{n}
@@ -35,10 +35,10 @@ expect_n_involutory(mult_by_im, 1, n = 4)
 
 }
 \seealso{
-Other {function properties}:
+Other function properties:
 \code{\link[=expect_idempotent]{expect_idempotent()}},
 \code{\link[=expect_involutory]{expect_involutory()}},
 \code{\link[=expect_n_idempotent]{expect_n_idempotent()}},
 \code{\link[=expect_periodic]{expect_periodic()}}
 }
-\concept{{function properties}}
+\concept{function properties}

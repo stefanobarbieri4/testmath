@@ -11,10 +11,10 @@ expect_idempotent(f, x, tolerance = testthat::testthat_tolerance(), ...)
 
 \item{x}{parameter(s). The value under which you test the function.}
 
-\item{...}{Additional arguments passed into \code{\link[waldo:compare]{waldo::compare()}}}
-
-\item{tolerance.}{Passed on to \code{\link[waldo:compare]{waldo::compare()}}. If non-null, ignores small
+\item{tolerance}{Passed on to \code{\link[waldo:compare]{waldo::compare()}}. If non-null, ignores small
 floating point differences}
+
+\item{...}{Additional arguments passed into \code{\link[waldo:compare]{waldo::compare()}}}
 }
 \description{
 This function tests whether applying a function twice yields the
@@ -25,10 +25,10 @@ x <- c(2, 1, 3)
 expect_idempotent(mean, x)
 }
 \seealso{
-Other {function properties}:
+Other function properties:
 \code{\link[=expect_involutory]{expect_involutory()}},
 \code{\link[=expect_n_idempotent]{expect_n_idempotent()}},
 \code{\link[=expect_n_involutory]{expect_n_involutory()}},
 \code{\link[=expect_periodic]{expect_periodic()}}
 }
-\concept{{function properties}}
+\concept{function properties}
