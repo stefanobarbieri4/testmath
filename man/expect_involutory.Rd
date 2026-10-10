@@ -11,10 +11,10 @@ expect_involutory(f, x, tolerance = testthat::testthat_tolerance(), ...)
 
 \item{x}{parameter(s). The value under which you test the function.}
 
-\item{...}{Additional arguments passed into \code{\link[waldo:compare]{waldo::compare()}}}
-
-\item{tolerance.}{Passed on to \code{\link[waldo:compare]{waldo::compare()}}. If non-null, ignores small
+\item{tolerance}{Passed on to \code{\link[waldo:compare]{waldo::compare()}}. If non-null, ignores small
 floating point differences}
+
+\item{...}{Additional arguments passed into \code{\link[waldo:compare]{waldo::compare()}}}
 }
 \description{
 This function tests whether a function, \eqn{f} is its own
@@ -27,13 +27,13 @@ self-inverse function) if this applies at each element in its domain.
 \examples{
 x <- c(2, 1, 3)
 expect_involutory(rev, x) # passes
-expect_involutory(sort, x) # errors
+testthat::expect_failure(expect_involutory(sort, x)) # fails
 }
 \seealso{
-Other {function properties}:
+Other function properties:
 \code{\link[=expect_idempotent]{expect_idempotent()}},
 \code{\link[=expect_n_idempotent]{expect_n_idempotent()}},
 \code{\link[=expect_n_involutory]{expect_n_involutory()}},
 \code{\link[=expect_periodic]{expect_periodic()}}
 }
-\concept{{function properties}}
+\concept{function properties}
