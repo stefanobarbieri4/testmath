@@ -1,5 +1,5 @@
-# .github/workflows/test.yaml
-name: test-packages
+# .github/workflows/check.yaml
+name: check-package
 
 on:
   push:
@@ -20,13 +20,15 @@ jobs:
       - name: Install dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::covr
+          extra-packages: |
+            any::covr
+            any::devtools
           needs: check
 
-      - name: Run Unit Tests & Code Coverage
+      - name: Run `devtools::check()` and get coverage
         run: |
           # Run package tests
-          devtools::test()
+          devtools::check()
 
           # Compute and print code coverage locally to the build log
           cov <- covr::package_coverage()
