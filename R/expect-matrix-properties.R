@@ -38,8 +38,8 @@ expect_symmetric <- function(
 #' Do you expect a matrix to be symmetric positive definite?
 #'
 #' @param matrix matrix. The matrix you are checking to be SPD.
-#' @param tolerance numeric. The tolerance for symmetry checks. Defaults to
-#'   `testthat`'s default tolerance.
+#' @param tolerance numeric. The tolerance for symmetry checks and eigenvalues.
+#'  Defaults to `testthat`'s default tolerance.
 #'
 #' @family matrix properties
 #'
@@ -76,8 +76,8 @@ expect_spd <- function(
 #' Do you expect a matrix to be positive semidefinite?
 #'
 #' @param matrix matrix. The matrix you are checking to be PSD.
-#' @param tolerance numeric. The tolerance for symmetry checks. Defaults to
-#'   `testthat`'s default tolerance.
+#' @param tolerance numeric. The tolerance for symmetry checks and eigenvalues.
+#'  Defaults to `testthat`'s default tolerance.
 #'
 #' @family matrix properties
 #'

@@ -102,7 +102,7 @@ check_pd <- function(
   }
 
   ev <- eigen(matrix, only.values = TRUE)$values
-  negative_indices <- which(ev < 0)
+  negative_indices <- which(ev < -tolerance)
 
   if (length(negative_indices) > 0) {
     bad_idx <- negative_indices[1]
@@ -124,7 +124,7 @@ check_pd <- function(
   positive_definite <- TRUE
   message <- NULL
 
-  if (any(ev == 0)) {
+  if (any(ev <= tolerance))  {
     positive_definite = FALSE
     message <- c(
       sprintf("Expected %s to be symmetric positive definite.", matrix_act$lab),

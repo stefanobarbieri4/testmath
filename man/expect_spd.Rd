@@ -9,8 +9,8 @@ expect_spd(matrix, tolerance = testthat::testthat_tolerance())
 \arguments{
 \item{matrix}{matrix. The matrix you are checking to be SPD.}
 
-\item{tolerance}{numeric. The tolerance for symmetry checks. Defaults to
-\code{testthat}'s default tolerance.}
+\item{tolerance}{numeric. The tolerance for symmetry checks and eigenvalues.
+Defaults to \code{testthat}'s default tolerance.}
 }
 \description{
 Do you expect a matrix to be symmetric positive definite?
