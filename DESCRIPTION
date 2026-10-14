@@ -1,9 +1,13 @@
 Package: testmath
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Title: Unit Tests For Mathematical Properties
+Version: 0.1.0
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+    person("Stefano", "Barbieri", , "sb3443@bath.ac.uk", role = c("aut", "cre"))
+Description: Inspired by `testthat`, `testmath` aims to provide some functions 
+  for unit tests of mathematical properties in a readable manner. 
+  At the moment, these functions cover a few aspects of two distinct areas -
+  unit tests for matrices and functions. Failure should provide detailed 
+  information for what condition led to the test failing. 
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
