@@ -201,6 +201,78 @@ expect_orthogonal <- function(
 
 }
 
+#' Do you expect a matrix to be diagonal?
+#'
+#' @param matrix matrix. The matrix you are checking to be diagonal.
+#' @param tolerance numeric. The tolerance of difference between compared
+#'   entries. Defaults to `testthat`'s default tolerance.
+#' @param ... Additional arguments passed to `waldo::compare()`.
+#'
+#' @family matrix properties
+#'
+#' @export
+#'
+#' @examples
+#' mat_diag <- diag(c(1, 5, 3))
+#' mat_not_diag <- matrix(c(1, 2, 0, 3), nrow = 2)
+#'
+#' expect_diagonal(mat_diag)
+#' testthat::expect_failure(expect_diagonal(mat_not_diag))
+
+expect_diagonal <- function(
+    matrix,
+    tolerance = testthat::testthat_tolerance(),
+    ...
+) {
+  matrix_quo <- rlang::enquo(matrix)
+  matrix_act <- testthat::quasi_label(matrix_quo)
+
+  if (!inherits(matrix, "matrix")) {
+    testthat::fail(
+      sprintf("Expected %s to be a matrix.", matrix_act$lab)
+    )
+    return(invisible(matrix))
+  }
+
+  rows <- nrow(matrix)
+  cols <- ncol(matrix)
+
+  if (rows != cols) {
+    testthat::fail(
+      sprintf("Expected %s to be square (it has %s rows and %s columns).", matrix_act$lab, rows, cols)
+    )
+    return(invisible(matrix))
+  }
+
+  diag_mat <- diag(diag(matrix))
+
+  comparison <- waldo::compare(
+    diag_mat,
+    matrix,
+    ...,
+    tolerance = tolerance,
+    x_arg = sprintf("diag(diag(%s))", matrix_act$lab),
+    y_arg = matrix_act$lab
+  )
+
+  if (length(comparison) == 0) {
+    testthat::pass()
+  } else {
+    testthat::fail(
+      c(
+        sprintf("Expected %s to be a diagonal matrix.", matrix_act$lab),
+        "",
+        "Off-diagonal elements must be zero.",
+        "",
+        "Differences:",
+        "",
+        comparison
+      )
+    )
+  }
+
+  invisible(matrix)
+}
 
 
 

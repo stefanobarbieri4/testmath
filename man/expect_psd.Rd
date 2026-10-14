@@ -31,6 +31,7 @@ testthat::expect_failure(expect_psd(mat_bad))
 }
 \seealso{
 Other matrix properties:
+\code{\link[=expect_diagonal]{expect_diagonal()}},
 \code{\link[=expect_orthogonal]{expect_orthogonal()}},
 \code{\link[=expect_spd]{expect_spd()}},
 \code{\link[=expect_symmetric]{expect_symmetric()}}
