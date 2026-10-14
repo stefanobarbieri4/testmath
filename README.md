@@ -22,7 +22,7 @@ At the moment, this package is only available on Github. If you would like to
 install it, use:
 
 ```
-devtools::install_github("stefanobarbieri4/testmath")
+pak::pak("stefanobarbieri4/testmath")
 ```
 
 ## Usage
