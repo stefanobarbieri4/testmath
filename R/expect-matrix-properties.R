@@ -244,7 +244,7 @@ expect_diagonal <- function(
     return(invisible(matrix))
   }
 
-  diag_mat <- diag(diag(matrix))
+  diag_mat <- diag(diag(matrix), nrow = rows)
 
   comparison <- waldo::compare(
     diag_mat,
