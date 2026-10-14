@@ -29,6 +29,7 @@ testthat::expect_failure(expect_symmetric(mat2))
 \seealso{
 Other matrix properties:
 \code{\link[=expect_orthogonal]{expect_orthogonal()}},
+\code{\link[=expect_psd]{expect_psd()}},
 \code{\link[=expect_spd]{expect_spd()}}
 }
 \concept{matrix properties}

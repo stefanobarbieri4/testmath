@@ -77,48 +77,68 @@ check_symmetric <- function(
   )
 }
 
-#' Helper function to check if a matrix is symmetric positive definite.
+#' Helper function to check if a matrix is (symmetric) (semi)-positive definite.
 #' Returns a list with `spd` (logical) and `message` (character or NULL).
+#' Matrix must be symmetric with eigen values (=)>0
 #' @noRd
-check_spd <- function(
+check_pd <- function(
     matrix,
     tolerance = testthat::testthat_tolerance(),
-    matrix_quo = NULL
+    matrix_quo = NULL,
+    desc
 ) {
   if (is.null(matrix_quo)) matrix_quo <- rlang::enquo(matrix)
   matrix_act <- testthat::quasi_label(matrix_quo)
 
-  # 1. Check symmetry first using check_symmetric
   sym_res <- check_symmetric(matrix, tolerance, matrix_quo)
   if (!sym_res$symmetric) {
     return(
       list(
-        spd = FALSE,
-        # Adjust message to specify it's a requirement for SPD if it was a symmetry failure
-        message = gsub("to be symmetric\\.", "to be symmetric (a requirement for symmetric positive definiteness).", sym_res$message)
+        positive_semidefinite = FALSE,
+        positive_definite = FALSE,
+        message = gsub("to be symmetric\\.", sprintf("to be symmetric (a requirement for %s).", desc), sym_res$message)
       )
     )
   }
 
-  # 2. Check eigenvalues
   ev <- eigen(matrix, only.values = TRUE)$values
-  non_pos_indices <- which(ev <= 0)
+  negative_indices <- which(ev < 0)
 
-  if (length(non_pos_indices) > 0) {
-    bad_idx <- non_pos_indices[1]
+  if (length(negative_indices) > 0) {
+    bad_idx <- negative_indices[1]
     bad_val <- ev[bad_idx]
 
     return(
       list(
-        spd = FALSE,
+        positive_semidefinite = FALSE,
+        positive_definite = FALSE,
         message = c(
-          sprintf("Expected %s to be symmetric positive definite.", matrix_act$lab),
+          sprintf("Expected %s to be %s.", matrix_act$lab, desc),
           "\n",
-          sprintf("Details: Found non-positive eigenvalue at index %i (value: %s)", bad_idx, bad_val)
+          sprintf("Details: Found negative eigenvalue at index %i (value: %s)", bad_idx, bad_val)
         )
       )
     )
   }
 
-  list(spd = TRUE, message = NULL)
+  positive_definite <- TRUE
+  message <- NULL
+
+  if (any(ev == 0)) {
+    positive_definite = FALSE
+    message <- c(
+      sprintf("Expected %s to be symmetric positive definite.", matrix_act$lab),
+      "\n",
+      sprintf("Details: Found an eigenvalue of 0.")
+    )
+  }
+
+  return(
+    list(
+      positive_semidefinite = TRUE,
+      positive_definite = positive_definite,
+      message = message
+    )
+  )
+
 }

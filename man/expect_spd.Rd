@@ -17,7 +17,8 @@ Do you expect a matrix to be symmetric positive definite?
 }
 \details{
 In addition to checking whether the matrix is symmetric, it also
-checks if the eigenvalues of \code{matrix} are all strictly positive.
+checks if the eigenvalues of \code{matrix} are all strictly positive. Equivalent
+to checking if \eqn{x^TAx > 0}.
 }
 \examples{
 mat_spd <- matrix(c(2, -1, -1, 2), nrow = 2) # spd
@@ -29,6 +30,7 @@ testthat::expect_failure(expect_spd(mat_not_spd))
 \seealso{
 Other matrix properties:
 \code{\link[=expect_orthogonal]{expect_orthogonal()}},
+\code{\link[=expect_psd]{expect_psd()}},
 \code{\link[=expect_symmetric]{expect_symmetric()}}
 }
 \concept{matrix properties}

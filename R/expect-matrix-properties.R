@@ -44,7 +44,8 @@ expect_symmetric <- function(
 #' @family matrix properties
 #'
 #' @details In addition to checking whether the matrix is symmetric, it also
-#'   checks if the eigenvalues of `matrix` are all strictly positive.
+#'   checks if the eigenvalues of `matrix` are all strictly positive. Equivalent
+#'   to checking if \eqn{x^TAx > 0}.
 #'
 #' @export
 #'
@@ -61,9 +62,49 @@ expect_spd <- function(
 ) {
   matrix_quo <- rlang::enquo(matrix)
 
-  res <- check_spd(matrix, tolerance, matrix_quo)
+  res <- check_pd(matrix, tolerance, matrix_quo, "symmetric positive definite")
 
-  if (!res$spd) {
+  if (!res$positive_definite) {
+    testthat::fail(res$message)
+  } else {
+    testthat::pass()
+  }
+
+  invisible(matrix)
+}
+
+#' Do you expect a matrix to be positive semidefinite?
+#'
+#' @param matrix matrix. The matrix you are checking to be PSD.
+#' @param tolerance numeric. The tolerance for symmetry checks. Defaults to
+#'   `testthat`'s default tolerance.
+#'
+#' @family matrix properties
+#'
+#' @details In addition to checking whether the matrix is symmetric, it also
+#'   checks if the eigenvalues of `matrix` are all positive.  Equivalent
+#'   to checking if \eqn{x^TAx \ge 0}.
+#'
+#' @export
+#'
+#' @examples
+#' # Matrix with zero eigenvalue (PSD, but not strictly PD)
+#' mat_psd <- matrix(c(1, 1, 1, 1), nrow = 2)
+#' expect_psd(mat_psd)
+#'
+#' # Indefinite matrix fails PSD
+#' mat_bad <- matrix(c(1, 2, 2, 1), nrow = 2)
+#' testthat::expect_failure(expect_psd(mat_bad))
+
+expect_psd <- function(
+    matrix,
+    tolerance = testthat::testthat_tolerance()
+) {
+  matrix_quo <- rlang::enquo(matrix)
+
+  res <- check_pd(matrix, tolerance, matrix_quo, "positive semidefinite")
+
+  if (!res$positive_semidefinite) {
     testthat::fail(res$message)
   } else {
     testthat::pass()
